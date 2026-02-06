@@ -1,0 +1,27 @@
+{
+  "name": "llamagotchi",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --hot src/index.ts",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "jsonrepair": "^3.13.2",
+    "react": "^18",
+    "react-dom": "^18",
+    "streamdown": "latest",
+    "turndown": "^7"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/turndown": "^5"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
