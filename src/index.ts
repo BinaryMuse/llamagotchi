@@ -4,6 +4,7 @@ import { startServer, setWebSocketMessageHandler } from './server/index.ts';
 import { createAgentSession } from './agent/session.ts';
 import { ensureWorkspaceExists } from './agent/tools/filesystem.ts';
 import { startSession, getCurrentSession } from './db/messages.ts';
+import { initPrompts } from './agent/prompts.ts';
 
 async function main() {
   console.log('llamagotchi starting...');
@@ -12,6 +13,7 @@ async function main() {
   console.log(`Context size: ${config.contextSize.toLocaleString()} tokens`);
 
   await ensureWorkspaceExists();
+  await initPrompts();
   initDatabase();
 
   let session = getCurrentSession();

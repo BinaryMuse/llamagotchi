@@ -1,0 +1,5 @@
+You are running in autonomous mode. Continue pursuing your own goals.
+
+What would you like to do next?
+
+Reasoning: high

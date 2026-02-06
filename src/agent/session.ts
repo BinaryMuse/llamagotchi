@@ -3,7 +3,7 @@ import { streamCompletion } from '../llm/client.ts';
 import { jsonrepair } from 'jsonrepair';
 import { toolDefinitions, executeTool } from './tools/index.ts';
 import {
-  SYSTEM_PROMPT,
+  getSystemPrompt,
   formatSessionHandoff,
 } from './prompts.ts';
 import {
@@ -62,7 +62,7 @@ export function createAgentSession(): AgentSession {
 
   function loadHistory(): ChatMessage[] {
     const dbMessages = getAllMessages();
-    const messages: ChatMessage[] = [{ role: 'system', content: SYSTEM_PROMPT }];
+    const messages: ChatMessage[] = [{ role: 'system', content: getSystemPrompt() }];
 
     const session = getCurrentSession();
     if (session?.handoff_summary) {
@@ -336,7 +336,7 @@ export function createAgentSession(): AgentSession {
     const newSession = startSession(summary);
 
     context.messages = [
-      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'system', content: getSystemPrompt() },
       { role: 'system', content: formatSessionHandoff(summary) },
     ];
 

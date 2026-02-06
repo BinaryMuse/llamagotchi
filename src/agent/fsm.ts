@@ -1,4 +1,5 @@
 import type { ChatMessage, Usage, ToolCall } from '../llm/client.ts';
+import { getAutonomousNudge } from './prompts.ts';
 
 // =============================================================================
 // State
@@ -219,7 +220,7 @@ function handleIdle(
       }
 
       // Add autonomous nudge
-      const nudge = 'You are running in autonomous mode. Continue pursuing your own goals.\n\nWhat would you like to do next?';
+      const nudge = getAutonomousNudge();
       const newContext = {
         ...context,
         messages: [...context.messages, { role: 'user' as const, content: nudge }],
@@ -251,14 +252,6 @@ function handleIdle(
     }
 
     default:
-      // Queue user messages that arrive in other states
-      if (event.type === 'user_message') {
-        return {
-          state: { type: 'idle' },
-          context: { ...context, queuedUserMessages: [...context.queuedUserMessages, event.content] },
-          effects,
-        };
-      }
       return { state: { type: 'idle' }, context, effects };
   }
 }
