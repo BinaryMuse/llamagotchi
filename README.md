@@ -135,11 +135,32 @@ Session boundaries are visible in the UI as dividers. You can scroll back to vie
 | `/api/state` | GET | Get current mode and delay |
 | `/api/notables` | GET | Retrieve notables list |
 
+## Customizing an Ollama Model
+
+You can create a custom Ollama model based on a different model using a [Modelfile](https://ollama.readthedocs.io/en/modelfile/).
+
+For example, to customize `gpt-oss:20b` with a larger context window, parameters, and a custom system prompt:
+
+```
+FROM gpt-oss:20b
+
+PARAMETER num_ctx 128000
+PARAMETER temperature 0.8
+
+SYSTEM You are an agent running in the llamagotchi automated agent harness. The harness will provide additional instructions.
+```
+
+To create this model and save it as `gpt-oss-oc` (the default model name for llamagotchi):
+
+```bash
+ollama create gpt-oss-oc -f /path/to/Modelfile
+```
+
 ## Development
 
 ```bash
 # Run with hot reload
-bun --hot src/index.ts
+bun run dev
 
 # Run tests
 bun test
