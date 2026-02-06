@@ -1,4 +1,4 @@
-import { dirname, join } from 'path';
+import { dirname, join, resolve } from 'path';
 
 export interface Config {
   ollamaEndpoint: string;
@@ -26,7 +26,7 @@ export function loadConfig(): Config {
     ollamaModel: process.env.OLLAMA_MODEL ?? 'gpt-oss-oc',
     braveApiKey: process.env.BRAVE_API_KEY ?? null,
     port: parseInt(process.env.PORT ?? '3000', 10),
-    workspacePath: process.env.WORKSPACE_PATH ?? './workspace',
+    workspacePath: resolve(process.env.WORKSPACE_PATH ?? './workspace'),
     contextSize: parseInt(process.env.CONTEXT_SIZE ?? '128000', 10),
     systemPromptPath: process.env.SYSTEM_PROMPT_PATH ?? join(defaultPromptsDir, 'system.txt'),
     autonomousPromptPath: process.env.AUTONOMOUS_PROMPT_PATH ?? join(defaultPromptsDir, 'autonomous.txt'),
