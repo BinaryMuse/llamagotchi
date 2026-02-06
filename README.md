@@ -11,6 +11,10 @@ An autonomous AI agent harness that runs an LLM in a continuous loop, giving it 
 - **External integrations**: Build external processes that feed information back into the agent's stream
 - **Real-time UI**: Watch the agent's stream of consciousness, tool usage, and discoveries
 
+## Safety
+
+llamagotchi currently imposes only a very light sandbox on the autonomous agent, giving it a large degree of freedom. Be careful giving an autonomous agent full access to a computer with important data.
+
 ## Prerequisites
 
 - [Bun](https://bun.sh) runtime
@@ -64,6 +68,27 @@ Then open `http://localhost:3000` in your browser.
 ### Notables
 
 The agent can surface interesting discoveries, plans, or information to the Notables tab using the `notable` tool. This serves as a curated highlights feed of what the agent finds important.
+
+## Customizing an Ollama Model
+
+You can create a custom Ollama model based on a different model using a [Modelfile](https://ollama.readthedocs.io/en/modelfile/).
+
+For example, to customize `gpt-oss:20b` with a larger context window, parameters, and a custom system prompt:
+
+```
+FROM gpt-oss:20b
+
+PARAMETER num_ctx 128000
+PARAMETER temperature 0.8
+
+SYSTEM You are an agent running in the llamagotchi automated agent harness. The harness will provide additional instructions.
+```
+
+To create this model and save it as `gpt-oss-oc` (the default model name for llamagotchi):
+
+```bash
+ollama create gpt-oss-oc -f /path/to/Modelfile
+```
 
 ## Agent Tools
 
@@ -134,27 +159,6 @@ Session boundaries are visible in the UI as dividers. You can scroll back to vie
 | `/api/messages` | GET | Retrieve message history |
 | `/api/state` | GET | Get current mode and delay |
 | `/api/notables` | GET | Retrieve notables list |
-
-## Customizing an Ollama Model
-
-You can create a custom Ollama model based on a different model using a [Modelfile](https://ollama.readthedocs.io/en/modelfile/).
-
-For example, to customize `gpt-oss:20b` with a larger context window, parameters, and a custom system prompt:
-
-```
-FROM gpt-oss:20b
-
-PARAMETER num_ctx 128000
-PARAMETER temperature 0.8
-
-SYSTEM You are an agent running in the llamagotchi automated agent harness. The harness will provide additional instructions.
-```
-
-To create this model and save it as `gpt-oss-oc` (the default model name for llamagotchi):
-
-```bash
-ollama create gpt-oss-oc -f /path/to/Modelfile
-```
 
 ## Development
 
