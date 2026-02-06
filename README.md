@@ -23,6 +23,8 @@ llamagotchi currently imposes only a very light sandbox on the autonomous agent,
 
 ## Installation
 
+After cloning the repo, change to its directory and run:
+
 ```bash
 bun install
 ```
@@ -41,6 +43,8 @@ Configuration is done via environment variables:
 | `CONTEXT_SIZE` | `128000` | Maximum context size in tokens |
 | `SYSTEM_PROMPT_PATH` | `prompts/system.txt` | Path to custom system prompt |
 | `AUTONOMOUS_PROMPT_PATH` | `prompts/autonomous.txt` | Path to custom autonomous nudge prompt |
+
+You can use a tool like [direnv](https://direnv.net/) to automate setting these.
 
 ## Running
 
