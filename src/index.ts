@@ -1,7 +1,7 @@
 import { config } from './config.ts';
 import { initDatabase } from './db/index.ts';
 import { startServer, setWebSocketMessageHandler } from './server/index.ts';
-import { createAgentHarness } from './agent/harness.ts';
+import { createAgentSession } from './agent/session.ts';
 import { ensureWorkspaceExists } from './agent/tools/filesystem.ts';
 import { startSession, getCurrentSession } from './db/messages.ts';
 
@@ -23,13 +23,13 @@ async function main() {
   }
 
   const server = startServer();
-  const harness = createAgentHarness();
+  const agentSession = createAgentSession();
 
   setWebSocketMessageHandler((msg, ws) => {
-    harness.handleWebSocketMessage(msg);
+    agentSession.handleWebSocketMessage(msg);
   });
 
-  harness.start();
+  agentSession.start();
 
   console.log(`Server running at http://localhost:${config.port}`);
 }

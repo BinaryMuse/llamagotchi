@@ -6,7 +6,7 @@ import { ChatInput } from './features/chat/ChatInput.tsx';
 import { NotablesView } from './features/notables/NotablesView.tsx';
 import { ControlBar } from './features/controls/ControlBar.tsx';
 import { useWebSocket } from './shared/hooks/useWebSocket.ts';
-import type { Message, Notable, AgentState, ContextPressure } from './shared/types.ts';
+import type { Message, Notable, AgentState, ContextPressure, FsmState } from './shared/types.ts';
 
 type Tab = 'chat' | 'notables';
 
@@ -27,6 +27,7 @@ function App() {
     content: string;
   } | null>(null);
   const [contextPressure, setContextPressure] = useState<ContextPressure | null>(null);
+  const [fsmState, setFsmState] = useState<FsmState>({ state: 'idle', turnNumber: 0 });
 
   const { status, send } = useWebSocket({
     onMessage: (msg) => {
@@ -68,6 +69,8 @@ function App() {
         setNotables((prev) => [msg.data as Notable, ...prev]);
       } else if (msg.type === 'context_pressure') {
         setContextPressure(msg.data as ContextPressure);
+      } else if (msg.type === 'fsm_state') {
+        setFsmState(msg.data as FsmState);
       }
     },
   });
@@ -144,6 +147,7 @@ function App() {
         onSetMode={handleSetMode}
         onSetDelay={handleSetDelay}
         onStep={handleStep}
+        fsmState={fsmState}
       />
 
       <main className="main">

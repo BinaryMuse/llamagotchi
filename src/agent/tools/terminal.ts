@@ -88,9 +88,9 @@ async function runCommand(command: string, cwd: string): Promise<string> {
   let output = '';
   if (stdout) output += stdout;
   if (stderr) output += (output ? '\n' : '') + `[stderr] ${stderr}`;
-  if (exitCode !== 0) output += `\n[exit code: ${exitCode}]`;
+  output += (output ? '\n' : '') + `[exit code: ${exitCode}]`;
 
-  return output || '(no output)';
+  return output;
 }
 
 export async function terminal(

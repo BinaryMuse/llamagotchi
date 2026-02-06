@@ -66,6 +66,18 @@ export function broadcastContextPressure(pressure: ContextPressure) {
   }
 }
 
+export interface FsmState {
+  state: string;
+  turnNumber: number;
+}
+
+export function broadcastFsmState(fsmState: FsmState) {
+  const payload = JSON.stringify({ type: 'fsm_state', data: fsmState });
+  for (const client of clients) {
+    client.send(payload);
+  }
+}
+
 export function getClientCount(): number {
   return clients.size;
 }

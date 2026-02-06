@@ -31,7 +31,12 @@ export interface ContextPressure {
   level: 'normal' | 'soft' | 'hard';
 }
 
+export interface FsmState {
+  state: string;
+  turnNumber: number;
+}
+
 export interface WSMessage {
-  type: 'message' | 'token' | 'reasoning' | 'state' | 'notable' | 'context_pressure';
+  type: 'message' | 'token' | 'reasoning' | 'state' | 'notable' | 'context_pressure' | 'fsm_state';
   data: unknown;
 }

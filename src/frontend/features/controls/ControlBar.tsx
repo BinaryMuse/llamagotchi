@@ -1,6 +1,7 @@
 import React from 'react';
 import { ModeToggle } from './ModeToggle.tsx';
 import { DelayControl } from './DelayControl.tsx';
+import type { FsmState } from '../../shared/types.ts';
 
 interface ControlBarProps {
   mode: 'conversational' | 'autonomous';
@@ -8,6 +9,7 @@ interface ControlBarProps {
   onSetMode: (mode: 'conversational' | 'autonomous') => void;
   onSetDelay: (delay: number | 'infinite') => void;
   onStep: () => void;
+  fsmState: FsmState;
 }
 
 export function ControlBar({
@@ -16,6 +18,7 @@ export function ControlBar({
   onSetMode,
   onSetDelay,
   onStep,
+  fsmState,
 }: ControlBarProps) {
   return (
     <div className="control-bar">
@@ -26,6 +29,10 @@ export function ControlBar({
         onStep={onStep}
         disabled={mode === 'conversational'}
       />
+      <div className="fsm-debug">
+        <span className="fsm-state">{fsmState.state}</span>
+        <span className="fsm-turn">turn {fsmState.turnNumber}</span>
+      </div>
     </div>
   );
 }

@@ -117,6 +117,27 @@ input, textarea {
   border-bottom: 1px solid var(--border-color);
 }
 
+.fsm-debug {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+.fsm-state {
+  padding: 2px 6px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  color: var(--text-secondary);
+}
+
+.fsm-turn {
+  color: var(--text-muted);
+}
+
 .mode-toggle {
   display: flex;
   align-items: center;
