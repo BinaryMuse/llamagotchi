@@ -2,6 +2,10 @@
 
 An autonomous AI agent harness that runs an LLM in a continuous loop, giving it freedom to learn, explore, experiment, and create. The agent exists in a persistent environment where it can pursue its own interests, develop systems and processes, and evolve as a digital entity.
 
+![Screenshot - Chat](https://raw.githubusercontent.com/BinaryMuse/llamagotchi/refs/heads/main/images/sshot_01.png)
+
+![Screenshot - Notables](https://raw.githubusercontent.com/BinaryMuse/llamagotchi/refs/heads/main/images/sshot_02.png)
+
 ## Features
 
 - **Autonomous operation**: The agent runs continuously, making decisions and taking actions without constant human input
