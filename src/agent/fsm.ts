@@ -71,7 +71,7 @@ export type Effect =
   | { type: 'execute_tool'; name: string; input: Record<string, unknown>; toolCallId: string }
   | { type: 'save_message'; source: string; content: string; toolName?: string; toolInput?: string }
   | { type: 'broadcast_message'; source: string; content: string; toolName?: string; toolInput?: string }
-  | { type: 'update_context_pressure'; tokens: number; maxTokens: number; ratio: number; level: 'normal' | 'soft' | 'hard' }
+  | { type: 'update_context_pressure'; tokens: number; maxTokens: number; ratio: number; level: 'normal' | 'soft' | 'hard' | 'overflow' }
   | { type: 'schedule_delay'; delayMs: number }
   | { type: 'wait_for_step' }
   | { type: 'check_context_pressure' }

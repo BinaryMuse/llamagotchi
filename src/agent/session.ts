@@ -55,6 +55,7 @@ export function createAgentSession(): AgentSession {
   let context: Context = createContext();
   let delayTimer: ReturnType<typeof setTimeout> | null = null;
   let pendingInterrupt = false;
+  let pendingCompaction = false;
 
   // =========================================================================
   // Initialization
@@ -243,6 +244,17 @@ export function createAgentSession(): AgentSession {
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
+
+      // If this is a context overflow error and we've warned about pending compaction,
+      // perform compaction now and retry the stream
+      if (pendingCompaction && isContextOverflowError(errorMessage)) {
+        performCompaction();
+        pendingCompaction = false;
+
+        // Retry the stream with the compacted context
+        return startStream();
+      }
+
       dispatch({ type: 'stream_error', error: errorMessage });
     }
   }
@@ -304,6 +316,19 @@ export function createAgentSession(): AgentSession {
   // Context Pressure Management
   // =========================================================================
 
+  function isContextOverflowError(error: string): boolean {
+    const lowerError = error.toLowerCase();
+    return (
+      lowerError.includes('context length') ||
+      lowerError.includes('context_length') ||
+      lowerError.includes('too many tokens') ||
+      lowerError.includes('maximum context') ||
+      lowerError.includes('context window') ||
+      lowerError.includes('token limit') ||
+      lowerError.includes('exceeds') && lowerError.includes('limit')
+    );
+  }
+
   function checkAndHandleContextPressure(): void {
     const pressure = getContextPressure(context.messages);
 
@@ -314,16 +339,22 @@ export function createAgentSession(): AgentSession {
       level: pressure.level,
     });
 
-    if (pressure.level === 'hard') {
-      const warningContent = `[System Notice] Context pressure is becoming critical. You should persist any important information now using your tools (filesystem, notable) before context compaction occurs.`;
-      const warningMsg = addMessage('system', warningContent);
-      broadcastMessage(warningMsg);
-      context.messages.push({ role: 'system', content: warningContent });
+    if (pressure.level === 'overflow') {
+      // Context exceeded 110% - compact immediately to ensure bounded size
+      // even if the model supports larger contexts
+      performCompaction();
+      pendingCompaction = false;
+    } else if (pressure.level === 'hard') {
+      // Only warn once per pending compaction cycle
+      if (!pendingCompaction) {
+        const warningContent = `[System Notice] Context pressure is becoming critical. You should persist any important information now using your tools (filesystem, notable) before context compaction occurs.`;
+        const warningMsg = addMessage('system', warningContent);
+        broadcastMessage(warningMsg);
+        context.messages.push({ role: 'system', content: warningContent });
 
-      // Schedule compaction
-      setTimeout(() => {
-        performCompaction();
-      }, 5000);
+        // Mark that compaction should happen when context overflows
+        pendingCompaction = true;
+      }
     } else if (pressure.level === 'soft') {
       // Soft compaction - summarize old messages
       context.messages = [context.messages[0]!, ...compactMessages(context.messages.slice(1))];

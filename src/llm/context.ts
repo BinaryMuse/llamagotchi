@@ -3,6 +3,7 @@ import { config } from '../config.ts';
 
 const SOFT_LIMIT_RATIO = 0.7;
 const HARD_LIMIT_RATIO = 0.9;
+const OVERFLOW_LIMIT_RATIO = 1.1;
 
 export function getContextSize(): number {
   return config.contextSize;
@@ -30,13 +31,15 @@ export function estimateTotalTokens(messages: ChatMessage[]): number {
 export function getContextPressure(messages: ChatMessage[]): {
   tokens: number;
   ratio: number;
-  level: 'normal' | 'soft' | 'hard';
+  level: 'normal' | 'soft' | 'hard' | 'overflow';
 } {
   const tokens = estimateTotalTokens(messages);
   const ratio = tokens / getContextSize();
 
-  let level: 'normal' | 'soft' | 'hard' = 'normal';
-  if (ratio >= HARD_LIMIT_RATIO) {
+  let level: 'normal' | 'soft' | 'hard' | 'overflow' = 'normal';
+  if (ratio >= OVERFLOW_LIMIT_RATIO) {
+    level = 'overflow';
+  } else if (ratio >= HARD_LIMIT_RATIO) {
     level = 'hard';
   } else if (ratio >= SOFT_LIMIT_RATIO) {
     level = 'soft';

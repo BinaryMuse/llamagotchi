@@ -28,7 +28,7 @@ export interface ContextPressure {
   tokens: number;
   maxTokens: number;
   ratio: number;
-  level: 'normal' | 'soft' | 'hard';
+  level: 'normal' | 'soft' | 'hard' | 'overflow';
 }
 
 export interface FsmState {
